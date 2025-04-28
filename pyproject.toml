@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm_from_scratch"
+version = "0.1.0"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"},
+]
+description = "Building blocks for creating large language models from scratch"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "torch>=2.3.0",          # Used throughout all chapters
+    "tiktoken>=0.5.1",       # Used in chapters 2, 4, 5
+    "matplotlib>=3.7.1",     # Used in chapters 4, 6, 7
+    "tensorflow>=2.18.0",    # Used in chapters 5, 6, 7
+    "tqdm>=4.66.1",          # Used in chapters 5, 7
+    "numpy>=1.26,<2.1",      # Dependency of several libraries like torch and pandas
+    "pandas>=2.2.1",         # Used in chapter 6
+    "psutil>=5.9.5",         # Used in chapter 7; installed automatically as dependency of torch
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
