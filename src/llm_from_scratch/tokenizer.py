@@ -6,6 +6,10 @@ class Tokenizer:
     Tokenizer class for encoding and decoding text.
     Initialize with either a dataset or a pre-existing vocabulary.
     """
+    # Special tokens
+    END_OF_TEXT_TOKEN: str = "<|endoftext|>"
+    UNKNOWN_TOKEN: str = "<|unk|>"
+
     def __init__(self, dataset: Optional[str] = None, vocabulary: Optional[Dict[str, int]] = None) -> None:
         """
         Initialize the tokenizer with either:
@@ -21,10 +25,20 @@ class Tokenizer:
         else:
             # Use the provided token-to-index mapping
             self.vocabulary: Dict[str, int] = vocabulary
+        # Add special tokens to vocabulary with unique indices
+        # Use max value + 1 to avoid collisions with existing indices
+        next_index = max(self.vocabulary.values()) + 1 if self.vocabulary else 0
+        for token in (self.END_OF_TEXT_TOKEN, self.UNKNOWN_TOKEN):
+            if token not in self.vocabulary:
+                self.vocabulary[token] = next_index
+                next_index += 1
         # Map from token string to integer index
         self.str_to_int: Dict[str, int] = self.vocabulary
         # Map from integer index to token string
         self.int_to_str: Dict[int, str] = {i: s for s, i in self.vocabulary.items()}
+        # Set special token indices
+        self.END_OF_TEXT_INDEX: int = self.str_to_int[self.END_OF_TEXT_TOKEN]
+        self.UNKNOWN_TOKEN_INDEX: int = self.str_to_int[self.UNKNOWN_TOKEN]
 
     def _build_vocabulary(self, dataset: str) -> Dict[str, int]:
         """
@@ -65,9 +79,9 @@ class Tokenizer:
         tokens = self._preprocess_text(text)
         encoded: List[int] = []
         for token in tokens:
-            if token not in self.vocabulary:
-                raise ValueError(f"Unknown token: '{token}'")
-            encoded.append(self.vocabulary[token])
+            # Map unknown tokens to UNKNOWN_TOKEN_INDEX
+            idx = self.vocabulary.get(token, self.UNKNOWN_TOKEN_INDEX)
+            encoded.append(idx)
         return encoded
 
     def decode(self, tokens: Sequence[int]) -> str:

@@ -22,11 +22,26 @@ def test_punctuation_handling():
     assert decoded == text
 
 
-def test_unknown_token_error():
+def test_unknown_token_mapping():
+    # Unknown tokens should map to UNKNOWN_TOKEN_INDEX
     tokenizer = Tokenizer(vocabulary={"a": 0})
-    with pytest.raises(ValueError) as exc:
-        tokenizer.encode("b")
-    assert "Unknown token" in str(exc.value)
+    encoded = tokenizer.encode("b")
+    assert encoded == [tokenizer.UNKNOWN_TOKEN_INDEX]
+    # Decoding unknown token index yields UNKNOWN_TOKEN
+    decoded = tokenizer.decode(encoded)
+    assert decoded == tokenizer.UNKNOWN_TOKEN
+
+    # Test encoding and decoding of the unknown token itself
+    encoded_unk = tokenizer.encode(tokenizer.UNKNOWN_TOKEN)
+    assert encoded_unk == [tokenizer.UNKNOWN_TOKEN_INDEX]
+    decoded_unk = tokenizer.decode(encoded_unk)
+    assert decoded_unk == tokenizer.UNKNOWN_TOKEN
+
+    # Test encoding and decoding of the end-of-text token
+    encoded_eot = tokenizer.encode(tokenizer.END_OF_TEXT_TOKEN)
+    assert encoded_eot == [tokenizer.END_OF_TEXT_INDEX]
+    decoded_eot = tokenizer.decode(encoded_eot)
+    assert decoded_eot == tokenizer.END_OF_TEXT_TOKEN
 
 
 def test_custom_vocab_initialization():
@@ -37,3 +52,14 @@ def test_custom_vocab_initialization():
     assert encoded == [1, 2]
     decoded = tokenizer.decode([2, 1])
     assert decoded == "b a"
+
+
+def test_special_tokens_in_vocab():
+    # Special tokens should be in vocabulary
+    tokenizer = Tokenizer(dataset="a")
+    vocab = tokenizer.get_vocabulary()
+    assert Tokenizer.END_OF_TEXT_TOKEN in vocab
+    assert Tokenizer.UNKNOWN_TOKEN in vocab
+    # Indices should match tokenizer attributes
+    assert tokenizer.END_OF_TEXT_INDEX == vocab[Tokenizer.END_OF_TEXT_TOKEN]
+    assert tokenizer.UNKNOWN_TOKEN_INDEX == vocab[Tokenizer.UNKNOWN_TOKEN]
