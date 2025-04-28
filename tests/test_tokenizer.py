@@ -31,6 +31,18 @@ def test_unknown_token_mapping():
     decoded = tokenizer.decode(encoded)
     assert decoded == tokenizer.UNKNOWN_TOKEN
 
+    # Test encoding and decoding of the unknown token itself
+    encoded_unk = tokenizer.encode(tokenizer.UNKNOWN_TOKEN)
+    assert encoded_unk == [tokenizer.UNKNOWN_TOKEN_INDEX]
+    decoded_unk = tokenizer.decode(encoded_unk)
+    assert decoded_unk == tokenizer.UNKNOWN_TOKEN
+
+    # Test encoding and decoding of the end-of-text token
+    encoded_eot = tokenizer.encode(tokenizer.END_OF_TEXT_TOKEN)
+    assert encoded_eot == [tokenizer.END_OF_TEXT_INDEX]
+    decoded_eot = tokenizer.decode(encoded_eot)
+    assert decoded_eot == tokenizer.END_OF_TEXT_TOKEN
+
 
 def test_custom_vocab_initialization():
     vocab = {"a": 1, "b": 2}
