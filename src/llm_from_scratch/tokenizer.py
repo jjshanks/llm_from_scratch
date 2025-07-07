@@ -4,8 +4,18 @@ from typing import Dict, List, Optional, Sequence
 
 class Tokenizer:
     """
-    Tokenizer class for encoding and decoding text.
-    Initialize with either a dataset or a pre-existing vocabulary.
+    A simple tokenizer for text preprocessing and encoding/decoding.
+
+    This tokenizer supports building vocabularies from text datasets and provides
+    methods to encode text into integer sequences and decode them back to text.
+    Includes special token handling for end-of-text and unknown tokens.
+
+    Args:
+        dataset: Optional text string to build vocabulary from
+        vocabulary: Optional pre-existing token-to-index mapping
+
+    Raises:
+        ValueError: If neither dataset nor vocabulary is provided
     """
 
     # Special tokens
@@ -16,9 +26,16 @@ class Tokenizer:
         self, dataset: Optional[str] = None, vocabulary: Optional[Dict[str, int]] = None
     ) -> None:
         """
-        Initialize the tokenizer with either:
-        - dataset: a text string to build the vocabulary from
-        - vocabulary: a pre-existing mapping of tokens to integer indices
+        Initialize the tokenizer with either a dataset or pre-existing vocabulary.
+
+        Args:
+            dataset: Text string to build vocabulary from. If provided, vocabulary
+                    will be built by preprocessing the text and creating token mappings.
+            vocabulary: Pre-existing token-to-index mapping. If provided, this will
+                       be used directly as the vocabulary.
+
+        Raises:
+            ValueError: If neither dataset nor vocabulary is provided.
         """
         if dataset is None and vocabulary is None:
             raise ValueError("Either dataset or vocabulary must be provided.")
@@ -46,8 +63,13 @@ class Tokenizer:
 
     def _build_vocabulary(self, dataset: str) -> Dict[str, int]:
         """
-        Builds a vocabulary from the dataset.
-        The vocabulary is a mapping from tokens to unique integers.
+        Build vocabulary from text dataset by preprocessing and tokenizing.
+
+        Args:
+            dataset: Raw text string to build vocabulary from
+
+        Returns:
+            Dictionary mapping tokens to unique integer indices, sorted alphabetically
         """
         words = self._preprocess_text(dataset)
         sorted_words = sorted(set(words))
@@ -56,7 +78,17 @@ class Tokenizer:
 
     def _preprocess_text(self, text: str) -> List[str]:
         """
-        Preprocesses the input text by removing unwanted characters and splitting into tokens.
+        Preprocess text by tokenizing on punctuation and whitespace.
+
+        Uses regex to split on common punctuation marks and whitespace while
+        preserving the punctuation as separate tokens. Strips whitespace and
+        removes empty tokens.
+
+        Args:
+            text: Raw input text to preprocess
+
+        Returns:
+            List of preprocessed tokens
         """
         words = re.split(r'([,.:;?_!"()\']|--|\s)', text)
         words = [item.strip() for item in words if item.strip()]
@@ -64,7 +96,16 @@ class Tokenizer:
 
     def _int_to_str(self, index: int) -> str:
         """
-        Converts an integer index to its corresponding token.
+        Convert integer index to corresponding token string.
+
+        Args:
+            index: Integer index to convert
+
+        Returns:
+            Token string corresponding to the index
+
+        Raises:
+            ValueError: If index is out of vocabulary range
         """
         if index < 0 or index >= len(self.vocabulary):
             raise ValueError(f"Index {index} out of range.")
@@ -72,13 +113,26 @@ class Tokenizer:
 
     def get_vocabulary(self) -> Dict[str, int]:
         """
-        Returns the vocabulary mapping tokens to integer indices.
+        Get the complete vocabulary mapping.
+
+        Returns:
+            Dictionary mapping token strings to integer indices
         """
         return self.vocabulary
 
     def encode(self, text: str) -> List[int]:
         """
-        Encodes the input text to a sequence of token indices.
+        Encode text string into sequence of integer token indices.
+
+        Preprocesses the input text and maps each token to its corresponding
+        integer index in the vocabulary. Unknown tokens are mapped to the
+        unknown token index.
+
+        Args:
+            text: Input text to encode
+
+        Returns:
+            List of integer indices representing the encoded text
         """
         tokens = self._preprocess_text(text)
         encoded: List[int] = []
@@ -90,7 +144,17 @@ class Tokenizer:
 
     def decode(self, tokens: Sequence[int]) -> str:
         """
-        Decodes a sequence of integer indices back to text.
+        Decode sequence of integer indices back to text string.
+
+        Converts each integer index to its corresponding token and joins them
+        with spaces. Applies post-processing to remove extra spaces before
+        punctuation marks for better readability.
+
+        Args:
+            tokens: Sequence of integer indices to decode
+
+        Returns:
+            Decoded text string with proper punctuation spacing
         """
         text = " ".join([self.int_to_str[i] for i in tokens])
         text = re.sub(r'\s+([,.?\!"()\'])', r"\1", text)
