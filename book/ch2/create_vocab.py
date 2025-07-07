@@ -8,6 +8,7 @@ by neural networks.
 
 Usage: uv run python book/ch2/create_vocab.py
 """
+
 import re
 
 # Read the training text - "The Verdict" by Edith Wharton
@@ -28,7 +29,7 @@ vocab_size = len(all_words)
 print(vocab_size)
 
 # Create the vocabulary dictionary: token -> integer ID
-vocab = {token:integer for integer,token in enumerate(all_words)}
+vocab = {token: integer for integer, token in enumerate(all_words)}
 
 # Display the first 50 vocabulary entries
 for i, item in enumerate(vocab.items()):

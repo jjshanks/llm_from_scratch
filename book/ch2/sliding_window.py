@@ -8,6 +8,7 @@ target token is simply the input shifted by one position.
 The sliding window approach is fundamental to LLM training because it allows the model
 to learn from overlapping sequences, maximizing the use of training data.
 """
+
 import tiktoken
 
 # Initialize the GPT-2 BPE tokenizer
@@ -28,22 +29,22 @@ enc_sample = enc_text[50:]
 context_size = 4
 
 # Create input-target pairs: targets are inputs shifted by 1 position
-x = enc_sample[:context_size]          # Input tokens
-y = enc_sample[1:context_size+1]       # Target tokens (shifted by 1)
+x = enc_sample[:context_size]  # Input tokens
+y = enc_sample[1 : context_size + 1]  # Target tokens (shifted by 1)
 
 print(f"Input tokens (x):  {x}")
 print(f"Target tokens (y): {y}")
 
 print("\nShowing how each input predicts its corresponding target:")
 # Demonstrate the next-word prediction task
-for i in range(1, context_size+1):
-    context = enc_sample[:i]           # Input context of length i
-    desired = enc_sample[i]            # Target token to predict
+for i in range(1, context_size + 1):
+    context = enc_sample[:i]  # Input context of length i
+    desired = enc_sample[i]  # Target token to predict
     print(f"{context} ----> {desired}")
 
 print("\nSame relationships shown as text:")
 # Show the same relationships in readable text format
-for i in range(1, context_size+1):
+for i in range(1, context_size + 1):
     context = enc_sample[:i]
     desired = enc_sample[i]
     # Decode token IDs back to text for readability

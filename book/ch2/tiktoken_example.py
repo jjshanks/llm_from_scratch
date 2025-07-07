@@ -13,6 +13,7 @@ Key advantages of BPE:
 
 Usage: uv run python book/ch2/tiktoken_example.py
 """
+
 from importlib.metadata import version
 import tiktoken
 
@@ -25,7 +26,7 @@ tokenizer = tiktoken.get_encoding("gpt2")
 # Example text containing unknown words and special tokens
 text = (
     "Hello, do you like tea? <|endoftext|> In the sunlit terraces"
-     "of someunknownPlace."
+    "of someunknownPlace."
 )
 
 # Encode text to token IDs, allowing the <|endoftext|> special token

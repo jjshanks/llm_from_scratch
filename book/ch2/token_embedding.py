@@ -17,6 +17,7 @@ The embedding process is crucial because:
 
 Usage: uv run python book/ch2/token_embedding.py
 """
+
 import torch
 from dataloader import create_dataloader_v1
 
@@ -28,8 +29,8 @@ input_ids = torch.tensor([2, 3, 5, 1])
 print(f"Sample token IDs: {input_ids}")
 
 # Define a small vocabulary and embedding dimension for illustration
-vocab_size = 6          # Small vocabulary with 6 possible tokens
-output_dim = 3          # 3-dimensional embedding vectors
+vocab_size = 6  # Small vocabulary with 6 possible tokens
+output_dim = 3  # 3-dimensional embedding vectors
 
 # Set random seed for reproducible results
 torch.manual_seed(123)
@@ -42,21 +43,21 @@ print("Embedding layer weight matrix:")
 print(embedding_layer.weight)
 
 # Demonstrate single token embedding lookup
-print(f"\nEmbedding for token ID 3:")
+print("\nEmbedding for token ID 3:")
 print(embedding_layer(torch.tensor([3])))
 
 # Demonstrate batch token embedding
 print(f"\nEmbeddings for all input token IDs {input_ids}:")
 print(embedding_layer(input_ids))
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 
 # Realistic example with GPT-2 scale embeddings
 print("=== Realistic LLM Token Embeddings ===")
 
 # Use realistic vocabulary and embedding sizes similar to GPT-2
-vocab_size = 50257      # GPT-2 BPE tokenizer vocabulary size
-output_dim = 256        # Embedding dimension (smaller than GPT-2's 768 for demonstration)
+vocab_size = 50257  # GPT-2 BPE tokenizer vocabulary size
+output_dim = 256  # Embedding dimension (smaller than GPT-2's 768 for demonstration)
 
 # Create token embedding layer for the full vocabulary
 token_embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
@@ -70,8 +71,7 @@ with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
 
 # Create data loader to get batched token sequences
 dataloader = create_dataloader_v1(
-    raw_text, batch_size=8, max_length=max_length,
-    stride=max_length, shuffle=False
+    raw_text, batch_size=8, max_length=max_length, stride=max_length, shuffle=False
 )
 
 # Get a batch of token sequences

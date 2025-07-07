@@ -2,7 +2,7 @@
 Chapter 2 - Reading and Preparing Text Data
 
 This script demonstrates the first step in preparing text data for LLM training:
-loading a text file and examining its basic properties. We use "The Verdict" by 
+loading a text file and examining its basic properties. We use "The Verdict" by
 Edith Wharton as our training text, which is in the public domain.
 
 The script shows how to:

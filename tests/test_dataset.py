@@ -8,10 +8,10 @@ def test_gpt_dataset_initialization():
     txt = "hello world test data sequence with enough tokens for samples"
     tokenizer = SimpleTokenizerV1(dataset=txt)
     dataset = GPTDatasetV1(txt, tokenizer, max_length=4, stride=1)
-    
+
     assert len(dataset) > 0
-    assert hasattr(dataset, 'input_ids')
-    assert hasattr(dataset, 'target_ids')
+    assert hasattr(dataset, "input_ids")
+    assert hasattr(dataset, "target_ids")
     assert len(dataset.input_ids) == len(dataset.target_ids)
 
 
@@ -20,7 +20,7 @@ def test_gpt_dataset_tensor_types():
     txt = "hello world test data"
     tokenizer = SimpleTokenizerV1(dataset=txt)
     dataset = GPTDatasetV1(txt, tokenizer, max_length=3, stride=1)
-    
+
     input_ids, target_ids = dataset[0]
     assert isinstance(input_ids, torch.Tensor)
     assert isinstance(target_ids, torch.Tensor)
@@ -33,7 +33,7 @@ def test_gpt_dataset_sequence_length():
     tokenizer = SimpleTokenizerV1(dataset=txt)
     max_length = 4
     dataset = GPTDatasetV1(txt, tokenizer, max_length=max_length, stride=1)
-    
+
     input_ids, target_ids = dataset[0]
     assert len(input_ids) == max_length
     assert len(target_ids) == max_length
@@ -44,13 +44,13 @@ def test_gpt_dataset_target_shift():
     txt = "hello world test data sequence"
     tokenizer = SimpleTokenizerV1(dataset=txt)
     dataset = GPTDatasetV1(txt, tokenizer, max_length=3, stride=1)
-    
+
     input_ids, target_ids = dataset[0]
     # Target should be input shifted by one position
     token_ids = tokenizer.encode(txt)
     expected_input = token_ids[0:3]
     expected_target = token_ids[1:4]
-    
+
     assert input_ids.tolist() == expected_input
     assert target_ids.tolist() == expected_target
 
@@ -62,13 +62,13 @@ def test_gpt_dataset_stride_functionality():
     max_length = 3
     stride = 2
     dataset = GPTDatasetV1(txt, tokenizer, max_length=max_length, stride=stride)
-    
+
     token_ids = tokenizer.encode(txt)
     expected_samples = (len(token_ids) - max_length) // stride + 1
-    
+
     # Should create samples with stride spacing
     assert len(dataset) <= expected_samples
-    
+
     if len(dataset) >= 2:
         input1, _ = dataset[0]
         input2, _ = dataset[1]
@@ -81,7 +81,7 @@ def test_gpt_dataset_empty_handling():
     txt = "a b c"
     tokenizer = SimpleTokenizerV1(dataset=txt)
     dataset = GPTDatasetV1(txt, tokenizer, max_length=2, stride=1)
-    
+
     # Should handle short sequences gracefully
     assert len(dataset) >= 0
     if len(dataset) > 0:
@@ -97,7 +97,7 @@ def test_gpt_dataset_large_stride():
     max_length = 3
     stride = 4
     dataset = GPTDatasetV1(txt, tokenizer, max_length=max_length, stride=stride)
-    
+
     # Should still create valid samples
     assert len(dataset) >= 0
     if len(dataset) > 0:
@@ -111,13 +111,13 @@ def test_gpt_dataset_indexing():
     txt = "hello world test data"
     tokenizer = SimpleTokenizerV1(dataset=txt)
     dataset = GPTDatasetV1(txt, tokenizer, max_length=3, stride=1)
-    
+
     # Test valid indexing
     for i in range(len(dataset)):
         input_ids, target_ids = dataset[i]
         assert isinstance(input_ids, torch.Tensor)
         assert isinstance(target_ids, torch.Tensor)
-    
+
     # Test bounds
     dataset_len = len(dataset)
     assert dataset_len == len(dataset.input_ids)

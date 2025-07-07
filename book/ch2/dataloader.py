@@ -8,16 +8,24 @@ sequences of tokens where each target is the next token in the sequence.
 The sliding window approach moves across the text to create overlapping training samples,
 which is essential for training LLMs to predict the next word in a sequence.
 """
-import tiktoken
-from torch.utils.data import Dataset, DataLoader
-from llm_from_scratch.dataset import GPTDatasetV1   
 
-def create_dataloader_v1(txt, batch_size=4, max_length=256,
-                         stride=128, shuffle=True, drop_last=True,
-                         num_workers=0):
+import tiktoken
+from torch.utils.data import DataLoader
+from llm_from_scratch.dataset import GPTDatasetV1
+
+
+def create_dataloader_v1(
+    txt,
+    batch_size=4,
+    max_length=256,
+    stride=128,
+    shuffle=True,
+    drop_last=True,
+    num_workers=0,
+):
     """
     Create a DataLoader for GPT-style training data.
-    
+
     Args:
         txt: Raw text to tokenize and create samples from
         batch_size: Number of samples per batch
@@ -26,26 +34,27 @@ def create_dataloader_v1(txt, batch_size=4, max_length=256,
         shuffle: Whether to shuffle the data
         drop_last: Whether to drop the last incomplete batch
         num_workers: Number of workers for data loading
-    
+
     Returns:
         DataLoader that yields (input_ids, target_ids) pairs
     """
     # Use GPT-2's BPE tokenizer
     tokenizer = tiktoken.get_encoding("gpt2")
-    
+
     # Create dataset using sliding window approach
     dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
-    
+
     # Create DataLoader for efficient batching
     dataloader = DataLoader(
         dataset,
         batch_size=batch_size,
         shuffle=shuffle,
         drop_last=drop_last,
-        num_workers=num_workers
+        num_workers=num_workers,
     )
 
     return dataloader
+
 
 # Load the training text
 with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
@@ -54,7 +63,8 @@ with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
 # Demonstrate DataLoader with batch_size=1 and stride=1
 # This creates overlapping sequences for maximum data utilization
 dataloader = create_dataloader_v1(
-    raw_text, batch_size=1, max_length=4, stride=1, shuffle=False)
+    raw_text, batch_size=1, max_length=4, stride=1, shuffle=False
+)
 data_iter = iter(dataloader)
 
 # Show how consecutive batches are shifted by the stride
@@ -69,8 +79,7 @@ print(second_batch)
 # Demonstrate DataLoader with larger batch_size and stride=max_length
 # This creates non-overlapping sequences for faster training
 dataloader = create_dataloader_v1(
-    raw_text, batch_size=8, max_length=4, stride=4,
-    shuffle=False
+    raw_text, batch_size=8, max_length=4, stride=4, shuffle=False
 )
 
 data_iter = iter(dataloader)

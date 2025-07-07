@@ -16,6 +16,7 @@ that can handle real-world text processing challenges.
 
 Usage: uv run python book/ch2/tokenizer_example.py
 """
+
 from llm_from_scratch.tokenizer import SimpleTokenizerV1
 import re
 
@@ -29,13 +30,13 @@ preprocessed = [item.strip() for item in preprocessed if item.strip()]
 
 # Create vocabulary from unique tokens
 all_words = sorted(set(preprocessed))
-vocab = {token:integer for integer,token in enumerate(all_words)}
+vocab = {token: integer for integer, token in enumerate(all_words)}
 
 # Initialize the custom tokenizer
 tokenizer = SimpleTokenizerV1(raw_text)
 
 # Test the tokenizer with text from the training set
-text = """"It's the last he painted, you know," 
+text = """"It's the last he painted, you know,"
        Mrs. Gisburn said with pardonable pride."""
 
 # Encode text to token IDs
@@ -54,7 +55,9 @@ print(f"Unknown words encoded: {unknown_ids}")
 
 # Test special context tokens
 print(f"\nEnd of text token ID: {tokenizer.END_OF_TEXT_INDEX}")
-mixed_text = "Hello, do you like tea? <|endoftext|> In the sunlit terraces of the palace."
+mixed_text = (
+    "Hello, do you like tea? <|endoftext|> In the sunlit terraces of the palace."
+)
 mixed_ids = tokenizer.encode(mixed_text)
 print(f"Text with <|endoftext|> encoded: {mixed_ids}")
 

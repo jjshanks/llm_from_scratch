@@ -20,7 +20,7 @@ updates:
           - "pytest*"
           - "black*"
           - "ruff*"
-  
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

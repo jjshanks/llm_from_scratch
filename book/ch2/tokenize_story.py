@@ -15,6 +15,7 @@ before moving to more sophisticated methods like BPE.
 
 Usage: uv run python book/ch2/tokenize_story.py
 """
+
 import re
 
 # Load the text file
