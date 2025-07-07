@@ -2,7 +2,7 @@ import re
 from typing import Dict, List, Optional, Sequence
 
 
-class Tokenizer:
+class SimpleTokenizerV1:
     """
     A simple tokenizer for text preprocessing and encoding/decoding.
 

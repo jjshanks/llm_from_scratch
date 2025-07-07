@@ -33,25 +33,33 @@ pytest -v
 
 The project follows a standard Python package structure:
 - `src/llm_from_scratch/` - Main package containing core implementations
-- `src/llm_from_scratch/tokenizer.py` - Tokenizer class with vocabulary building and encoding/decoding
+- `src/llm_from_scratch/tokenizer.py` - SimpleTokenizerV1 class with vocabulary building and encoding/decoding
+- `src/llm_from_scratch/dataset.py` - GPTDatasetV1 class for creating training data with sliding window approach
+- `book/ch2/` - Chapter 2 implementation examples and utilities
 - `tests/` - pytest test suite
 - `pyproject.toml` - Project configuration and dependencies
 
 ## Key Components
 
-### Tokenizer Class
-The main `Tokenizer` class handles:
+### SimpleTokenizerV1 Class
+The main `SimpleTokenizerV1` class handles:
 - Vocabulary building from text datasets
 - Text preprocessing and tokenization
 - Encoding text to integer sequences
 - Decoding integer sequences back to text
 - Special token handling (`<|endoftext|>` and `<|unk|>`)
 
+### GPTDatasetV1 Class
+The `GPTDatasetV1` PyTorch Dataset class provides:
+- Sliding window approach for creating input-target pairs
+- Configurable stride and context length
+- Integration with PyTorch DataLoader for batch processing
+
 ## Task Completion
 
 Before committing changes:
 1. Run `pytest` to ensure all tests pass
-2. Verify package imports work: `from llm_from_scratch.tokenizer import Tokenizer`
+2. Verify package imports work: `from llm_from_scratch.tokenizer import SimpleTokenizerV1` and `from llm_from_scratch.dataset import GPTDatasetV1`
 3. Ensure new dependencies are added to pyproject.toml
 
 ## Tech Stack

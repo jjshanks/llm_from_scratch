@@ -2,6 +2,11 @@
 
 This project provides the building blocks for creating large language models from scratch. It is based off the book [Build a Large Language Model (From Scratch)](https://www.manning.com/books/build-a-large-language-model-from-scratch).
 
+The codebase includes:
+- **Tokenization**: SimpleTokenizerV1 class for text preprocessing and vocabulary building
+- **Dataset Creation**: GPTDatasetV1 class for generating training data with sliding window approach
+- **Chapter Examples**: Complete implementations from the book in the `book/ch2/` directory
+
 ## Setup
 
 1. Install the package and its dependencies (via `pyproject.toml`):
@@ -18,16 +23,22 @@ This project provides the building blocks for creating large language models fro
 
 ## Usage
 
-Once installed, you can import and use the `Tokenizer` class:
+Once installed, you can import and use the tokenizer and dataset classes:
 
 ```python
-from llm_from_scratch.tokenizer import Tokenizer
+from llm_from_scratch.tokenizer import SimpleTokenizerV1
+from llm_from_scratch.dataset import GPTDatasetV1
 
-tokenizer = Tokenizer(dataset="Hello, world!")
+# Tokenization
+tokenizer = SimpleTokenizerV1(dataset="Hello, world!")
 encoded = tokenizer.encode("Hello, world!")
 print(encoded)
 decoded = tokenizer.decode(encoded)
 print(decoded)
+
+# Dataset for training
+dataset = GPTDatasetV1(txt="Hello, world!", tokenizer=tokenizer, max_length=4, stride=1)
+print(len(dataset))
 ```
 
 ## Running Tests
