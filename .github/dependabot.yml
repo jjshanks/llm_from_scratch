@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      pytorch:
+        patterns:
+          - "torch*"
+      ml-libs:
+        patterns:
+          - "tensorflow*"
+          - "numpy*"
+          - "pandas*"
+          - "matplotlib*"
+      dev-tools:
+        patterns:
+          - "pytest*"
+          - "black*"
+          - "ruff*"
+  
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
