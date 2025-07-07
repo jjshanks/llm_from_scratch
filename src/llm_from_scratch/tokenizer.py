@@ -1,16 +1,20 @@
 import re
 from typing import Dict, List, Optional, Sequence
 
+
 class Tokenizer:
     """
     Tokenizer class for encoding and decoding text.
     Initialize with either a dataset or a pre-existing vocabulary.
     """
+
     # Special tokens
     END_OF_TEXT_TOKEN: str = "<|endoftext|>"
     UNKNOWN_TOKEN: str = "<|unk|>"
 
-    def __init__(self, dataset: Optional[str] = None, vocabulary: Optional[Dict[str, int]] = None) -> None:
+    def __init__(
+        self, dataset: Optional[str] = None, vocabulary: Optional[Dict[str, int]] = None
+    ) -> None:
         """
         Initialize the tokenizer with either:
         - dataset: a text string to build the vocabulary from
@@ -89,5 +93,5 @@ class Tokenizer:
         Decodes a sequence of integer indices back to text.
         """
         text = " ".join([self.int_to_str[i] for i in tokens])
-        text = re.sub(r'\s+([,.?\!"()\'])', r'\1', text)
+        text = re.sub(r'\s+([,.?\!"()\'])', r"\1", text)
         return text
