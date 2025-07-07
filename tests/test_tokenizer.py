@@ -1,5 +1,3 @@
-import pytest
-
 from llm_from_scratch.tokenizer import Tokenizer
 
 
