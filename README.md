@@ -4,17 +4,10 @@ This project provides the building blocks for creating large language models fro
 
 ## Setup
 
- 1. Create a virtual environment:
+ 1. Install the package and its dependencies (via `pyproject.toml`):
 
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
- 2. Install the package and its dependencies (via `pyproject.toml`):
-
-    ```bash
-    pip install -e .
+    uv pip install -e .
     ```
 
 ## Usage
@@ -36,6 +29,6 @@ print(decoded)
 This project includes pytest tests under `tests/`. To run them:
 
 ```bash
-pip install pytest
+uv pip install pytest
 pytest
 ```
