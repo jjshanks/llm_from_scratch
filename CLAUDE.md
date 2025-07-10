@@ -20,13 +20,13 @@ uv pip install -e '.[dev]'
 
 ```bash
 # Run all tests
-pytest
+uv run pytest
 
 # Run specific test file
-pytest tests/test_tokenizer.py
+uv run pytest tests/test_tokenizer.py
 
 # Run with verbose output
-pytest -v
+uv run pytest -v
 ```
 
 ## Architecture
@@ -58,7 +58,7 @@ The `GPTDatasetV1` PyTorch Dataset class provides:
 ## Task Completion
 
 Before committing changes:
-1. Run `pytest` to ensure all tests pass
+1. Run `uv run pytest` to ensure all tests pass
 2. Verify package imports work: `from llm_from_scratch.tokenizer import SimpleTokenizerV1` and `from llm_from_scratch.dataset import GPTDatasetV1`
 3. Ensure new dependencies are added to pyproject.toml
 
