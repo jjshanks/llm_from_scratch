@@ -82,12 +82,14 @@ print("Input sentence:", " ".join(tokens))
 # Dimension 1: action/movement (high for verbs/action nouns)
 # Dimension 2: grammatical/functional (high for function words)
 inputs = torch.tensor(
-  [[0.9, 0.1, 0.2], # Your     - pronoun (entity)
-   [0.8, 0.7, 0.1], # journey  - noun (entity + action)
-   [0.2, 0.9, 0.2], # starts   - verb (action)
-   [0.1, 0.1, 0.9], # with     - preposition (functional)
-   [0.7, 0.2, 0.3], # one      - number (entity-like)
-   [0.6, 0.5, 0.2]] # step     - noun (entity + some action)
+    [
+        [0.9, 0.1, 0.2],  # Your     - pronoun (entity)
+        [0.8, 0.7, 0.1],  # journey  - noun (entity + action)
+        [0.2, 0.9, 0.2],  # starts   - verb (action)
+        [0.1, 0.1, 0.9],  # with     - preposition (functional)
+        [0.7, 0.2, 0.3],  # one      - number (entity-like)
+        [0.6, 0.5, 0.2],
+    ]  # step     - noun (entity + some action)
 )
 
 print("\nEmbedding vectors (rows = tokens, columns = embedding dimensions):")
@@ -95,18 +97,22 @@ print("         entity  action  function")
 print("         ------  ------  --------")
 for i, token in enumerate(tokens):
     embedding = inputs[i].tolist()
-    print(f"{token:8}   {embedding[0]:.1f}     {embedding[1]:.1f}       {embedding[2]:.1f}")
+    print(
+        f"{token:8}   {embedding[0]:.1f}     {embedding[1]:.1f}       {embedding[2]:.1f}"
+    )
 
 # === Computing attention scores for a single query (Figure 3.8) ===
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("=== Computing attention for query token 'journey' ===")
 
 # Use second input element x^(2) ("journey") as query
 query_idx = 1
 query = inputs[query_idx]
 query_formatted = [f"{val:.1f}" for val in query.tolist()]
-print(f"\nQuery token: '{tokens[query_idx]}' with embedding [{', '.join(query_formatted)}]")
+print(
+    f"\nQuery token: '{tokens[query_idx]}' with embedding [{', '.join(query_formatted)}]"
+)
 print("  Dimensions: [entity=0.8, action=0.7, function=0.1]")
 print("  → 'journey' has high entity and action values (it's a noun about movement)")
 
@@ -142,9 +148,11 @@ weights_formatted = [f"{val:.4f}" for val in attn_weights_2_tmp.tolist()]
 print(f"\nAttention weights (simple normalization): [{', '.join(weights_formatted)}]")
 print(f"Sum: {attn_weights_2_tmp.sum():.4f}")
 
+
 # Define naive softmax function for illustration
 def softmax_naive(x):
     return torch.exp(x) / torch.exp(x).sum(dim=0)
+
 
 # Apply softmax normalization (preferred method)
 attn_weights_2_naive = softmax_naive(attn_scores_2)
@@ -180,7 +188,9 @@ for i, x_i in enumerate(inputs):
     embedding = inputs[i].tolist()
     contrib = contribution.tolist()
 
-    print(f"  {tokens[i]:8}: {weight:.4f} × [{embedding[0]:.1f}, {embedding[1]:.1f}, {embedding[2]:.1f}] = [{contrib[0]:.4f}, {contrib[1]:.4f}, {contrib[2]:.4f}]")
+    print(
+        f"  {tokens[i]:8}: {weight:.4f} × [{embedding[0]:.1f}, {embedding[1]:.1f}, {embedding[2]:.1f}] = [{contrib[0]:.4f}, {contrib[1]:.4f}, {contrib[2]:.4f}]"
+    )
 
 # Show the final sum
 context_formatted = [f"{val:.4f}" for val in context_vec_2.tolist()]
@@ -191,7 +201,7 @@ print("that incorporates information from all tokens in the sentence.")
 
 # === Compare with simple averaging (no attention) ===
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("=== Comparing Attention vs Simple Averaging ===")
 
 # Simple averaging gives equal weight to all tokens
@@ -215,7 +225,7 @@ print("- Note how 'starts' and 'step' (action-related) get higher weights")
 
 # === Section 3.3.2: Computing attention weights for all input tokens ===
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("=== Generalizing to all tokens ===")
 
 # Step 1: Compute all attention scores via matrix multiplication
@@ -248,7 +258,7 @@ for i, (token, ctx_vec) in enumerate(zip(tokens, all_context_vecs)):
 
 # === Analyzing attention patterns ===
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)
 print("=== Analyzing Attention Patterns ===")
 
 # Show which tokens each word pays most attention to
@@ -261,7 +271,9 @@ for i, token in enumerate(tokens):
     if max_idx == i:
         print(f"  {token:8} pays most attention to itself (weight={max_weight:.4f})")
     else:
-        print(f"  {token:8} pays most attention to '{tokens[max_idx]}' (weight={max_weight:.4f})")
+        print(
+            f"  {token:8} pays most attention to '{tokens[max_idx]}' (weight={max_weight:.4f})"
+        )
         print(f"           (self-attention weight: {self_weight:.4f})")
 
 print("\nWhy do 'one' and 'step' attend more to 'journey' than themselves?")
@@ -271,15 +283,21 @@ for i, token in enumerate(tokens):
     print(f"  {token:8} self-similarity: {self_score:.4f}")
 
 print("\nKey insights:")
-print("- 'journey' has the highest self-similarity (1.14) due to strong entity+action values")
+print(
+    "- 'journey' has the highest self-similarity (1.14) due to strong entity+action values"
+)
 print("- 'one' (0.62) and 'step' (0.65) have weaker self-similarity")
 print("- After softmax normalization, 'journey' becomes an attention magnet")
-print("- This demonstrates how attention helps tokens 'borrow' context from semantically rich words")
+print(
+    "- This demonstrates how attention helps tokens 'borrow' context from semantically rich words"
+)
 
 # Compare with simple average to show benefit of attention
 print("\n=== Benefits of Attention ===")
 simple_context = inputs.mean(dim=0, keepdim=True).expand(len(tokens), -1)
-attention_benefit = ((all_context_vecs - simple_context).abs().sum() / len(tokens)).item()
+attention_benefit = (
+    (all_context_vecs - simple_context).abs().sum() / len(tokens)
+).item()
 print(f"\nAverage change from simple averaging: {attention_benefit:.4f}")
 print("This shows how attention creates more diverse, context-aware representations")
 print("compared to treating all tokens equally.")
