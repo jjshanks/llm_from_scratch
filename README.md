@@ -5,7 +5,8 @@ This project provides the building blocks for creating large language models fro
 The codebase includes:
 - **Tokenization**: SimpleTokenizerV1 class for text preprocessing and vocabulary building
 - **Dataset Creation**: GPTDatasetV1 class for generating training data with sliding window approach
-- **Chapter Examples**: Complete implementations from the book in the `book/ch2/` directory
+- **Self-Attention**: Two implementations of self-attention mechanisms (SelfAttention_v1 and SelfAttention_v2)
+- **Chapter Examples**: Complete implementations from the book in the `book/` directory (ch2 and ch3)
 
 ## Setup
 
@@ -28,6 +29,8 @@ Once installed, you can import and use the tokenizer and dataset classes:
 ```python
 from llm_from_scratch.tokenizer import SimpleTokenizerV1
 from llm_from_scratch.dataset import GPTDatasetV1
+from llm_from_scratch.self_attention import SelfAttention_v1, SelfAttention_v2
+import torch
 
 # Tokenization
 tokenizer = SimpleTokenizerV1(dataset="Hello, world!")
@@ -39,6 +42,18 @@ print(decoded)
 # Dataset for training
 dataset = GPTDatasetV1(txt="Hello, world!", tokenizer=tokenizer, max_length=4, stride=1)
 print(len(dataset))
+
+# Self-Attention
+d_in, d_out = 3, 2
+inputs = torch.rand(6, d_in)  # 6 tokens, 3-dimensional embeddings
+
+# Basic implementation
+attn_v1 = SelfAttention_v1(d_in, d_out)
+context_v1 = attn_v1(inputs)
+
+# Production-ready implementation with linear layers
+attn_v2 = SelfAttention_v2(d_in, d_out, qkv_bias=False)
+context_v2 = attn_v2(inputs)
 ```
 
 ## Running Tests

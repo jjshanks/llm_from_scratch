@@ -272,7 +272,7 @@ for i, token in enumerate(tokens):
         print(f"  {token:8} pays most attention to itself (weight={max_weight:.4f})")
     else:
         print(
-            f"  {token:8} pays most attention to '{tokens[max_idx]}' (weight={max_weight:.4f})"
+            f"  {token:8} pays most attention to '{tokens[int(max_idx)]}' (weight={max_weight:.4f})"
         )
         print(f"           (self-attention weight: {self_weight:.4f})")
 
