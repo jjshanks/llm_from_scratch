@@ -19,8 +19,8 @@ The implementation follows Section 3.5 of the book:
 Usage: uv run python book/ch3/masked_attention.py
 """
 
-from llm_from_scratch.causal_attention import CausalAttention
-from llm_from_scratch.self_attention import SelfAttention_v2
+from llm_from_scratch.attention import CausalAttention
+from llm_from_scratch.attention import SelfAttention_v2
 import torch
 
 # === Section 3.5.1: Applying a causal attention mask ===

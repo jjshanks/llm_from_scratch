@@ -5,7 +5,8 @@ This project provides the building blocks for creating large language models fro
 The codebase includes:
 - **Tokenization**: SimpleTokenizerV1 class for text preprocessing and vocabulary building
 - **Dataset Creation**: GPTDatasetV1 class for generating training data with sliding window approach
-- **Self-Attention**: Two implementations of self-attention mechanisms (SelfAttention_v1 and SelfAttention_v2)
+- **Self-Attention**: Multiple attention mechanisms including basic (SelfAttention_v1, v2), causal, and multi-head attention
+- **Utilities**: Helper functions for creating tokenizers and dataloaders
 - **Chapter Examples**: Complete implementations from the book in the `book/` directory (ch2 and ch3)
 
 ## Setup
@@ -29,7 +30,8 @@ Once installed, you can import and use the tokenizer and dataset classes:
 ```python
 from llm_from_scratch.tokenizer import SimpleTokenizerV1
 from llm_from_scratch.dataset import GPTDatasetV1
-from llm_from_scratch.self_attention import SelfAttention_v1, SelfAttention_v2
+from llm_from_scratch.attention import SelfAttention_v1, SelfAttention_v2, CausalAttention, MultiHeadAttention
+from llm_from_scratch.utils import create_tokenizer, create_dataloader_v1
 import torch
 
 # Tokenization
@@ -54,6 +56,25 @@ context_v1 = attn_v1(inputs)
 # Production-ready implementation with linear layers
 attn_v2 = SelfAttention_v2(d_in, d_out, qkv_bias=False)
 context_v2 = attn_v2(inputs)
+
+# Causal attention for autoregressive models
+batch_size = 2
+inputs_batched = torch.rand(batch_size, 6, d_in)
+causal_attn = CausalAttention(d_in, d_out, context_length=6, dropout=0.1)
+context_causal = causal_attn(inputs_batched)
+
+# Multi-head attention
+multi_head = MultiHeadAttention(d_in, d_out*4, context_length=6, dropout=0.1, num_heads=4)
+context_multi = multi_head(inputs_batched)
+
+# Using utility functions
+dataloader = create_dataloader_v1(
+    txt="Your text here",
+    batch_size=4,
+    max_length=8,
+    stride=4,
+    use_bpe=True  # Uses tiktoken GPT-2 tokenizer
+)
 ```
 
 ## Running Tests

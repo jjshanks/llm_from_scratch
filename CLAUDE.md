@@ -35,9 +35,10 @@ The project follows a standard Python package structure:
 - `src/llm_from_scratch/` - Main package containing core implementations
 - `src/llm_from_scratch/tokenizer.py` - SimpleTokenizerV1 class with vocabulary building and encoding/decoding
 - `src/llm_from_scratch/dataset.py` - GPTDatasetV1 class for creating training data with sliding window approach
-- `src/llm_from_scratch/self_attention.py` - Self-attention implementations (SelfAttention_v1 and SelfAttention_v2)
+- `src/llm_from_scratch/attention.py` - Self-attention implementations (SelfAttention_v1, SelfAttention_v2, CausalAttention, MultiHeadAttention)
+- `src/llm_from_scratch/utils.py` - Utility functions for creating tokenizers and dataloaders
 - `book/ch2/` - Chapter 2 implementation examples and utilities
-- `book/ch3/` - Chapter 3 self-attention mechanisms and trainable components
+- `book/ch3/` - Chapter 3 self-attention mechanisms and trainable components (simple, masked, multi-head)
 - `tests/` - pytest test suite
 - `pyproject.toml` - Project configuration and dependencies
 
@@ -68,6 +69,21 @@ The `GPTDatasetV1` PyTorch Dataset class provides:
 - Optional bias terms for flexibility
 - More stable training dynamics
 
+**CausalAttention**: Masked self-attention for autoregressive models
+- Causal masking to prevent attending to future tokens
+- Dropout regularization for training
+- Efficient batched computation
+
+**MultiHeadAttention**: Parallel attention with multiple heads
+- Splits attention across multiple representation subspaces
+- Includes output projection layer
+- Supports causal masking
+
+### Utility Functions
+The `utils.py` module provides convenience functions:
+- `create_tokenizer()`: Creates SimpleTokenizerV1 or tiktoken BPE tokenizer
+- `create_dataloader_v1()`: Creates DataLoader with GPTDatasetV1 for training
+
 ## Task Completion
 
 Before committing changes:
@@ -75,7 +91,8 @@ Before committing changes:
 2. Verify package imports work:
    - `from llm_from_scratch.tokenizer import SimpleTokenizerV1`
    - `from llm_from_scratch.dataset import GPTDatasetV1`
-   - `from llm_from_scratch.self_attention import SelfAttention_v1, SelfAttention_v2`
+   - `from llm_from_scratch.attention import SelfAttention_v1, SelfAttention_v2, CausalAttention, MultiHeadAttention`
+   - `from llm_from_scratch.utils import create_tokenizer, create_dataloader_v1`
 3. Ensure new dependencies are added to pyproject.toml
 
 ## Tech Stack

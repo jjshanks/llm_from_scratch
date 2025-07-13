@@ -16,7 +16,7 @@ This implementation forms the foundation for transformer-based models like GPT.
 Usage: uv run python book/ch3/trainable_self_attention.py
 """
 
-from llm_from_scratch.self_attention import SelfAttention_v1, SelfAttention_v2
+from llm_from_scratch.attention import SelfAttention_v1, SelfAttention_v2
 import torch
 
 
