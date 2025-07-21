@@ -36,9 +36,11 @@ The project follows a standard Python package structure:
 - `src/llm_from_scratch/tokenizer.py` - SimpleTokenizerV1 class with vocabulary building and encoding/decoding
 - `src/llm_from_scratch/dataset.py` - GPTDatasetV1 class for creating training data with sliding window approach
 - `src/llm_from_scratch/attention.py` - Self-attention implementations (SelfAttention_v1, SelfAttention_v2, CausalAttention, MultiHeadAttention)
+- `src/llm_from_scratch/model.py` - GPT model components (LayerNorm, GELU, FeedForward, TransformerBlock, GPTModel)
 - `src/llm_from_scratch/utils.py` - Utility functions for creating tokenizers and dataloaders
 - `book/ch2/` - Chapter 2 implementation examples and utilities
 - `book/ch3/` - Chapter 3 self-attention mechanisms and trainable components (simple, masked, multi-head)
+- `book/ch4/` - Chapter 4 GPT model building blocks and assembly scripts
 - `tests/` - pytest test suite
 - `pyproject.toml` - Project configuration and dependencies
 
@@ -79,6 +81,34 @@ The `GPTDatasetV1` PyTorch Dataset class provides:
 - Includes output projection layer
 - Supports causal masking
 
+### Model Components
+**LayerNorm**: Layer normalization for training stability
+- Normalizes activations to zero mean and unit variance
+- Learnable scale and shift parameters
+- Essential for deep transformer training
+
+**GELU**: Gaussian Error Linear Unit activation
+- Smooth, differentiable activation function
+- Better performance than ReLU in transformers
+- Standard activation for modern language models
+
+**FeedForward**: Position-wise feed-forward network
+- Two linear layers with GELU activation
+- 4x hidden dimension expansion
+- Dropout for regularization
+
+**TransformerBlock**: Complete transformer layer
+- Multi-head self-attention
+- Feed-forward network
+- Layer normalization (pre-norm architecture)
+- Residual connections
+
+**GPTModel**: Full GPT architecture
+- Token and position embeddings
+- Stack of transformer blocks
+- Output projection layer
+- Configurable architecture (layers, heads, dimensions)
+
 ### Utility Functions
 The `utils.py` module provides convenience functions:
 - `create_tokenizer()`: Creates SimpleTokenizerV1 or tiktoken BPE tokenizer
@@ -92,6 +122,7 @@ Before committing changes:
    - `from llm_from_scratch.tokenizer import SimpleTokenizerV1`
    - `from llm_from_scratch.dataset import GPTDatasetV1`
    - `from llm_from_scratch.attention import SelfAttention_v1, SelfAttention_v2, CausalAttention, MultiHeadAttention`
+   - `from llm_from_scratch.model import LayerNorm, GELU, FeedForward, TransformerBlock, GPTModel, GPTConfig`
    - `from llm_from_scratch.utils import create_tokenizer, create_dataloader_v1`
 3. Ensure new dependencies are added to pyproject.toml
 
