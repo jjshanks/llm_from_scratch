@@ -31,3 +31,7 @@ ENV/
 
 # VSCode settings
 .vscode/
+
+# Artifacts
+*.pth
+book/**/*.png

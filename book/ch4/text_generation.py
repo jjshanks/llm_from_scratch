@@ -22,6 +22,7 @@ import torch
 import torch.nn.functional as F
 import tiktoken
 from llm_from_scratch.model import GPTModel
+from llm_from_scratch.utils import generate_text_simple
 from configuration import GPT_CONFIG_124M
 
 
@@ -66,43 +67,6 @@ def visualize_generation_process():
     print("• Reaching max length")
     print("• Generating end-of-text token")
     print("• Manual stopping")
-
-
-def generate_text_simple(model, idx, max_new_tokens, context_size):
-    """
-    Simple greedy text generation.
-
-    Args:
-        model: The GPT model
-        idx: Starting token IDs [batch_size, sequence_length]
-        max_new_tokens: How many new tokens to generate
-        context_size: Maximum context length (truncate if needed)
-    """
-    # Set model to evaluation mode
-    model.eval()
-
-    # Generate tokens one at a time
-    for _ in range(max_new_tokens):
-        # Crop context if it exceeds the model's context length
-        idx_cond = idx[:, -context_size:]
-
-        # Get predictions (no gradient needed for inference)
-        with torch.no_grad():
-            logits = model(idx_cond)
-
-        # Focus on the last token's predictions
-        logits = logits[:, -1, :]  # [batch_size, vocab_size]
-
-        # Convert logits to probabilities
-        probas = torch.softmax(logits, dim=-1)
-
-        # Pick the most likely next token (greedy decoding)
-        idx_next = torch.argmax(probas, dim=-1, keepdim=True)
-
-        # Append to the sequence
-        idx = torch.cat((idx, idx_next), dim=1)
-
-    return idx
 
 
 def demonstrate_generation():
