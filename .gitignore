@@ -35,3 +35,5 @@ ENV/
 # Artifacts
 *.pth
 book/**/*.png
+book/ch6/sms_spam_collection
+book/**/*.csv
